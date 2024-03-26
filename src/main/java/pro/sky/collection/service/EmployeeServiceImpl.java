@@ -7,32 +7,30 @@ import pro.sky.collection.exception.EmployeeNotFoundException;
 import pro.sky.collection.exception.EmployeeStorageIsFullException;
 
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
-    List<Employee> employees = new ArrayList<>();
+    private final Map<String, Employee> storage = new HashMap<>();
     private static final int maxCountEmployees = 50;
     @Override
     public Employee addEmployee(String firstName, String lastName) throws EmployeeAlreadyAddedException {
         Employee employee = new Employee(firstName, lastName);
-        if(employees.size() > maxCountEmployees) {
+        if(storage.size() > maxCountEmployees) {
             throw new EmployeeStorageIsFullException("Коллекция уже заполнена");
         }
-        if (employees.contains(employee)) {
+        if (storage.containsKey(firstName + lastName)) {
             throw new EmployeeAlreadyAddedException("Сотрудник с таким именем уже добавлен");
         }
-        employees.add(employee);
+        storage.put(firstName + lastName, employee);
         return employee;
     }
 
    @Override
     public Employee deleteEmployee(String firstName, String lastName) {
         Employee employee = new Employee(firstName, lastName);
-        if (employees.contains(employee)) {
-            employees.remove(employee);
+        if (storage.containsKey(firstName + lastName)) {
+            storage.remove(firstName + lastName);
             return employee;
         }
         throw new EmployeeNotFoundException("Сотрудник с таким именем не найден");
@@ -41,13 +39,13 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public Employee findEmployee(String firstName, String lastName) {
         Employee employee = new Employee(firstName, lastName);
-        if(!employees.contains(employee)) {
+        if(!storage.containsKey(firstName + lastName)) {
             throw new EmployeeNotFoundException("Сотрудник с таким именем не найден");
         }
-        return employee;
+        return storage.get(firstName + lastName);
     }
 
     public Collection<Employee> findAll() {
-        return employees;
+        return Collections.unmodifiableCollection(storage.values());
     }
 }
