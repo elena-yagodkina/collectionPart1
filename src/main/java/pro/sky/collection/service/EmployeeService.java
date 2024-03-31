@@ -8,11 +8,11 @@ import pro.sky.collection.exception.EmployeeStorageIsFullException;
 import java.util.Collection;
 
 public interface EmployeeService {
-    Employee addEmployee(String firstName, String lastName) throws EmployeeAlreadyAddedException, EmployeeStorageIsFullException;
+    Employee addEmployee(String firstName, String lastName, Integer salary, Integer department) throws EmployeeAlreadyAddedException, EmployeeStorageIsFullException;
 
-    Employee deleteEmployee(String firstName, String lastName) throws EmployeeNotFoundException;
+    Employee deleteEmployee(String firstName, String lastName, Integer salary, Integer department) throws EmployeeNotFoundException;
 
-    Employee findEmployee(String firstName, String lastName) throws EmployeeNotFoundException;
+    Employee findEmployee(String firstName, String lastName, Integer salary, Integer department) throws EmployeeNotFoundException;
 
     Collection<Employee> findAll();
 }

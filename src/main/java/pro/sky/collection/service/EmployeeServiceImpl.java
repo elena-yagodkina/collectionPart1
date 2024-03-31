@@ -14,8 +14,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final Map<String, Employee> storage = new HashMap<>();
     private static final int maxCountEmployees = 50;
     @Override
-    public Employee addEmployee(String firstName, String lastName) throws EmployeeAlreadyAddedException {
-        Employee employee = new Employee(firstName, lastName);
+    public Employee addEmployee(String firstName, String lastName, Integer salary, Integer department) throws EmployeeAlreadyAddedException {
+        Employee employee = new Employee(firstName, lastName, salary, department);
         if(storage.size() > maxCountEmployees) {
             throw new EmployeeStorageIsFullException("Коллекция уже заполнена");
         }
@@ -26,10 +26,10 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employee;
     }
 
-   @Override
-    public Employee deleteEmployee(String firstName, String lastName) {
-        Employee employee = new Employee(firstName, lastName);
-        if (storage.containsKey(firstName + lastName)) {
+    @Override
+    public Employee deleteEmployee(String firstName, String lastName, Integer salary, Integer department) {
+        Employee employee = new Employee(firstName, lastName, salary, department);
+        if (storage.containsKey(firstName + lastName + salary + department)) {
             storage.remove(firstName + lastName);
             return employee;
         }
@@ -37,8 +37,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Employee findEmployee(String firstName, String lastName) {
-        Employee employee = new Employee(firstName, lastName);
+    public Employee findEmployee(String firstName, String lastName, Integer salary, Integer department) {
+        Employee employee = new Employee(firstName, lastName, salary, department);
         if(!storage.containsKey(firstName + lastName)) {
             throw new EmployeeNotFoundException("Сотрудник с таким именем не найден");
         }
