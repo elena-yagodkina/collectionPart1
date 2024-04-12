@@ -1,7 +1,9 @@
 package pro.sky.collection.service;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import pro.sky.collection.Employee;
+import pro.sky.collection.exception.BadRequestException;
 import pro.sky.collection.exception.EmployeeAlreadyAddedException;
 import pro.sky.collection.exception.EmployeeNotFoundException;
 import pro.sky.collection.exception.EmployeeStorageIsFullException;
@@ -43,6 +45,13 @@ public class EmployeeServiceImpl implements EmployeeService {
             throw new EmployeeNotFoundException("Сотрудник с таким именем не найден");
         }
         return storage.get(firstName + lastName);
+    }
+
+    @Override
+    public void validateName(String firstName, String lastName) {
+        if (!StringUtils.isAlpha(firstName) || !StringUtils.isAlpha(lastName)) {
+            throw new BadRequestException("Невалидные символы");
+        }
     }
 
     public Collection<Employee> findAll() {
